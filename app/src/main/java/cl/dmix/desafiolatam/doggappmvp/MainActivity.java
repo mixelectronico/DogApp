@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BreedAdapter.OnItemClickListener{
 
     private RecyclerView recyclerView;
     private BreedAdapter breedAdapter;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     *      INICIO DEL RECYCLERVIEW
                     * */
                     recyclerView = findViewById(R.id.breedListRecyclerView);
-                    breedAdapter = new BreedAdapter(breedListFromApi);
+                    breedAdapter = makeAdapter(breedListFromApi);
                     recyclerView.setAdapter(breedAdapter);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -59,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("PROCESO", String.valueOf(t));
             }
         });
+    }
 
+    public BreedAdapter makeAdapter(List<String> breedList){
+        return new BreedAdapter(breedList, this, this);
+    }
+
+    @Override
+    public void OnClick(BreedAdapter.ViewHolder viewHolder, String dogBreed) {
+        Toast.makeText(this, "Has hecho click en: "+dogBreed, Toast.LENGTH_SHORT).show();
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -19,10 +18,16 @@ public class BreedAdapter extends RecyclerView.Adapter<BreedAdapter.ViewHolder> 
 
     private Context context;
     private List<String> breedList = new ArrayList<>();
-    private AdapterView.OnItemClickListener listener;
+    private OnItemClickListener listener;
 
-    public BreedAdapter(List<String> breedList) {
+    public BreedAdapter(List<String> breedList, Context context, OnItemClickListener listener) {
         this.breedList = breedList;
+        this.context = context;
+        this.listener = listener;
+    }
+
+    public interface OnItemClickListener{
+        void OnClick(ViewHolder viewHolder, String dogBreed);
     }
 
     @NonNull
@@ -45,7 +50,7 @@ public class BreedAdapter extends RecyclerView.Adapter<BreedAdapter.ViewHolder> 
         return itemCount;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         //Declaro los objetos del viewHolder que se usaran en el Recycler.
         private Button btnBreedName;
@@ -54,10 +59,25 @@ public class BreedAdapter extends RecyclerView.Adapter<BreedAdapter.ViewHolder> 
             super(itemView);
             //Enlazo los elementos declarados con las vistas del viewHolder con sus respectivos ID.
             btnBreedName = itemView.findViewById(R.id.btn_breedListItem);
+
+            btnBreedName.setOnClickListener(this);
         }
 
         public void setButtonText(String breedName) {
             btnBreedName.setText(breedName);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.OnClick(this, getBreedByPosition(getAdapterPosition()));
+        }
+    }
+
+    public String getBreedByPosition(int position){
+        if(position != RecyclerView.NO_POSITION){
+            return breedList.get(position);
+        }else{
+            return "No Breed in this position";
         }
     }
 }
