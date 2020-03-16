@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DoggAppMVP</string>
+    <string name="favoritos">FAVORITOS</string>
 </resources>
