@@ -13,10 +13,10 @@
         android:orientation="vertical"
         >
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/breedListRecyclerView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="680dp"
+            android:id="@+id/main_frame_layout"
             />
 
         <Button

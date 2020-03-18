@@ -9,7 +9,6 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cl.dmix.desafiolatam.doggappmvp.R;
@@ -17,7 +16,7 @@ import cl.dmix.desafiolatam.doggappmvp.R;
 public class BreedAdapter extends RecyclerView.Adapter<BreedAdapter.ViewHolder> {//Escribiendo esto, se generan errores que generan el resto del codigo!
 
     private Context context;
-    private List<String> breedList = new ArrayList<>();
+    private List<String> breedList;
     private OnItemClickListener listener;
 
     public BreedAdapter(List<String> breedList, Context context, OnItemClickListener listener) {
