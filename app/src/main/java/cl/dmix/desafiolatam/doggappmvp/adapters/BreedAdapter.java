@@ -45,24 +45,22 @@ public class BreedAdapter extends RecyclerView.Adapter<BreedAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        int itemCount = breedList.size();
-        return itemCount;
+        return breedList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         //Declaro los objetos del viewHolder que se usaran en el Recycler.
         private Button btnBreedName;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             //Enlazo los elementos declarados con las vistas del viewHolder con sus respectivos ID.
             btnBreedName = itemView.findViewById(R.id.btn_breedListItem);
-
             btnBreedName.setOnClickListener(this);
         }
 
-        public void setButtonText(String breedName) {
+        void setButtonText(String breedName) {
             btnBreedName.setText(breedName);
         }
 
@@ -72,7 +70,7 @@ public class BreedAdapter extends RecyclerView.Adapter<BreedAdapter.ViewHolder> 
         }
     }
 
-    public String getBreedByPosition(int position){
+    private String getBreedByPosition(int position){
         if(position != RecyclerView.NO_POSITION){
             return breedList.get(position);
         }else{

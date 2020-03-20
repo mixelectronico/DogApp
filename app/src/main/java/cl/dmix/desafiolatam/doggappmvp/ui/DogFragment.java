@@ -3,22 +3,28 @@ package cl.dmix.desafiolatam.doggappmvp.ui;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cl.dmix.desafiolatam.doggappmvp.R;
+import cl.dmix.desafiolatam.doggappmvp.adapters.DogAdapter;
 
-public class DogFragment extends Fragment {
+public class DogFragment extends Fragment implements DogAdapter.onLongDogClickListener{
     private static final String ARG_PARAM1 = "dogPictures";
 
     private List<String> dogPictures;
+
+    private ImageView dogImageView;
 
     public DogFragment() {
         // Required empty public constructor
@@ -38,14 +44,23 @@ public class DogFragment extends Fragment {
         if (getArguments() != null) {
             dogPictures = getArguments().getStringArrayList(ARG_PARAM1);
         }
-        Log.e("PROCESO", "Estás en el nuevo fragmento y tienes la siguiente lista: "+dogPictures);
-        Toast.makeText(getContext(), "ESTAS EN EL NUEVO FRAGMENTO", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dog, container, false);
+        View view = inflater.inflate(R.layout.fragment_dog, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.doggy_recyclerView);
+        DogAdapter dogAdapter = new DogAdapter(dogPictures, getContext(),this);
+        recyclerView.setAdapter(dogAdapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        return view;
+    }
+
+    @Override
+    public void onLongClick(DogAdapter.ViewHolder viewHolder, String dogURL) {
+        Toast.makeText(getContext(), "Obtuviste el enlace: "+dogURL, Toast.LENGTH_SHORT).show();
     }
 }
