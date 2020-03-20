@@ -1,21 +1,17 @@
 package cl.dmix.desafiolatam.doggappmvp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import cl.dmix.desafiolatam.doggappmvp.adapters.BreedAdapter;
 import cl.dmix.desafiolatam.doggappmvp.api.RetrofitClient;
 import cl.dmix.desafiolatam.doggappmvp.api.apiDog;
 import cl.dmix.desafiolatam.doggappmvp.model.BreedListResponse;
 import cl.dmix.desafiolatam.doggappmvp.ui.BreedFragment;
+import cl.dmix.desafiolatam.doggappmvp.ui.DogFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +28,6 @@ public class MainActivity extends AppCompatActivity{
         callBreedList.enqueue(new Callback<BreedListResponse>() {
             @Override
             public void onResponse(Call<BreedListResponse> call, Response<BreedListResponse> response) {
-
                 if (response.body() != null) {
                     List<String> breedListFromApi;
                     breedListFromApi = response.body().getBreedList();

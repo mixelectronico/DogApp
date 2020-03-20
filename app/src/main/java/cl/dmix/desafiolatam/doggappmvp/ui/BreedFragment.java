@@ -17,10 +17,14 @@ import java.util.List;
 
 import cl.dmix.desafiolatam.doggappmvp.R;
 import cl.dmix.desafiolatam.doggappmvp.adapters.BreedAdapter;
+import cl.dmix.desafiolatam.doggappmvp.api.RetrofitClient;
+import cl.dmix.desafiolatam.doggappmvp.api.apiDog;
+import cl.dmix.desafiolatam.doggappmvp.model.BreedImageListResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BreedFragment extends Fragment implements BreedAdapter.OnItemClickListener{
-    private RecyclerView recyclerView;
-    private BreedAdapter breedAdapter;
 
     private static final String ARG_PARAM1 = "breedList";
     private List<String> breedList;
@@ -51,8 +55,8 @@ public class BreedFragment extends Fragment implements BreedAdapter.OnItemClickL
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_breed, container, false);
         Log.i("onCreateView", String.valueOf(breedList));
-        recyclerView = view.findViewById(R.id.breedList_recyclerView);
-        breedAdapter = new BreedAdapter(breedList, getContext(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.breedList_recyclerView);
+        BreedAdapter breedAdapter = new BreedAdapter(breedList, getContext(), this);
         recyclerView.setAdapter(breedAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -61,6 +65,36 @@ public class BreedFragment extends Fragment implements BreedAdapter.OnItemClickL
 
     @Override
     public void OnClick(BreedAdapter.ViewHolder viewHolder, String dogBreed) {
-        Toast.makeText(getContext(), "Has hecho click en: "+dogBreed, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Has hecho click en: " + dogBreed, Toast.LENGTH_SHORT).show();
+
+        apiDog service = RetrofitClient.getRetrofitInstance().create(apiDog.class);
+        Call<BreedImageListResponse> callBreedImageList = service.getBreedImageList(dogBreed);
+        callBreedImageList.enqueue(new Callback<BreedImageListResponse>() {
+
+            @Override
+            public void onResponse(Call<BreedImageListResponse> call, Response<BreedImageListResponse> response) {
+                if(response.body() != null){
+                    List<String> dogImageListFromApi;
+                    dogImageListFromApi = response.body().getImageURL();
+                    makeADoggyFragmentNow(dogImageListFromApi);
+                }else{
+                    Log.e("PROCESO", "La respuesta de la API está vacía");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BreedImageListResponse> call, Throwable t) {
+                Log.e("PROCESO", String.valueOf(t));
+            }
+        });
+    }
+
+    private void makeADoggyFragmentNow(List<String> dogImageListFromApi) {
+        DogFragment doggyFragment = DogFragment.newInstance(dogImageListFromApi);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_frame_layout, doggyFragment, "DetailFragment")
+                .addToBackStack("Dog")
+                .commit();
     }
 }
